@@ -5,7 +5,7 @@ import sys
 from contextlib import closing
 from pathlib import Path
 
-from . import conditions, gate, journal, roster
+from . import air_samples, conditions, gate, journal, roster
 from .model import DomainError, choice, decode, minute, require, token
 from .store import config, connect, initialize, one, transaction
 
@@ -46,6 +46,8 @@ def parser():
         if name in ("roster", "zone"):
             sub.add_argument("identifier")
         sub.add_argument("--at", type=int, required=True)
+    air = commands.add_parser("air-review", help="review synthetic probe samples against the shift")
+    air.add_argument("file")
     receipt = commands.add_parser("receipt", help="read the original decision for one event")
     receipt.add_argument("identifier")
     commands.add_parser("log", help="list original decision receipts")
@@ -57,6 +59,8 @@ def parser():
 def reading(db, args):
     with transaction(db):
         cfg = config(db)
+        if args.command == "air-review":
+            return air_samples.review(db, cfg, load(args.file))
         if args.command == "log":
             return journal.receipts(db)
         if args.command == "receipt":

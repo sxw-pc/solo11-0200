@@ -1,0 +1,32 @@
+{
+  "survey": "loop-air-1",
+  "calibrations": [
+    {
+      "id": "zero-4",
+      "probe": "sampler-a",
+      "starts": 3,
+      "ends": 13,
+      "offset": -2
+    }
+  ],
+  "samples": [
+    {
+      "id": "sample-pearl",
+      "probe": "sampler-a",
+      "calibration": "zero-4",
+      "zone": "pearl",
+      "at": 8,
+      "raw": 62,
+      "inspector": "g-relay"
+    },
+    {
+      "id": "sample-echo",
+      "probe": "sampler-a",
+      "calibration": "zero-4",
+      "zone": "echo",
+      "at": 10,
+      "raw": 27,
+      "inspector": "g-relay"
+    }
+  ]
+}

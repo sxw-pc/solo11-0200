@@ -60,3 +60,7 @@ python -B -m caveflow --db shift.sqlite rebuild
 - 业务拒绝返回可查询回执，调用退出码为 0。无效结构、版本跳步或异文重用事件 ID 以退出码 2 回滚整批。相同事件可重试并读到原回执。`rebuild` 在单个事务内用同一配置和原始事件到达顺序重新生成投影及回执。日志不可用时重算回滚，保留之前的可查询投影。
 
 编号夹具覆盖开班、两支队伍、洞内和班务交接、迟到步号与见证复位、关洞签署及等人数身份交换。`bad-packet.json` 覆盖完整坏批回滚。每个 SQLite 文件对应一套班次和固定拓扑，使用合成事件文件进行离线操作演练。
+
+## Synthetic air probe review
+
+After loading the opening evidence, run `python -B -m caveflow --db training.sqlite air-review fixtures/air-samples.json`. The packet identifies each raw reading and its zero calibration. The report checks the calibration interval and the zone evidence at the reading minute, then gives the corrected value with the supporting patrol and lighting records.

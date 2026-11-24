@@ -1,0 +1,13 @@
+{
+  "shift": "quartz-17",
+  "foyer": "foyer",
+  "guides": ["g-amber", "g-blue", "g-relay", "g-spare"],
+  "desks": ["desk-day", "desk-night"],
+  "patrol_ttl": 30,
+  "light_ttl": 20,
+  "zones": {
+    "foyer": {"capacity": 6, "neighbors": ["pearl", "echo"]},
+    "pearl": {"capacity": 4, "neighbors": ["foyer"]},
+    "echo": {"capacity": 4, "neighbors": ["foyer"]}
+  }
+}

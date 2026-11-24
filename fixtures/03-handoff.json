@@ -1,0 +1,13 @@
+[
+  {"id":"give-amber","shift":"quartz-17","kind":"escort.offer","at":10,"data":{"group":"amber","guide":"g-amber","receiver":"g-relay"}},
+  {"id":"amber-move-pending","shift":"quartz-17","kind":"escort.move","at":10,"data":{"group":"amber","guide":"g-amber","destination":"foyer"}},
+  {"id":"wrong-take-amber","shift":"quartz-17","kind":"escort.resolve","at":10,"data":{"offer":"give-amber","guide":"g-blue","response":"accept"}},
+  {"id":"take-amber","shift":"quartz-17","kind":"escort.resolve","at":11,"data":{"offer":"give-amber","guide":"g-relay","response":"accept"}},
+  {"id":"desk-initial","shift":"quartz-17","kind":"desk.offer","at":11,"data":{"desk":"desk-day","receiver":"desk-night"}},
+  {"id":"l-pearl-new","shift":"quartz-17","kind":"light.round","at":10,"data":{"round":"l-pearl-new","zone":"pearl","tester":"g-spare"}},
+  {"id":"lp-new-marker","shift":"quartz-17","kind":"light.check","at":10,"data":{"round":"l-pearl-new","channel":"marker","version":1,"reading":"pass"}},
+  {"id":"desk-stale","shift":"quartz-17","kind":"desk.accept","at":12,"data":{"offer":"desk-initial","desk":"desk-night"}},
+  {"id":"lp-new-reserve","shift":"quartz-17","kind":"light.check","at":10,"data":{"round":"l-pearl-new","channel":"reserve","version":1,"reading":"pass"}},
+  {"id":"desk-refreshed","shift":"quartz-17","kind":"desk.offer","at":13,"data":{"desk":"desk-day","receiver":"desk-night"}},
+  {"id":"desk-received","shift":"quartz-17","kind":"desk.accept","at":14,"data":{"offer":"desk-refreshed","desk":"desk-night"}}
+]

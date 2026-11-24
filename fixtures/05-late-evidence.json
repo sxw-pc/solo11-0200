@@ -1,0 +1,4 @@
+[
+  {"id":"late-roll-removed","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-a","person":"a2","version":2,"mark":"absent"}},
+  {"id":"late-roll-correction","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-a","person":"a3","version":2,"mark":"present"}}
+]

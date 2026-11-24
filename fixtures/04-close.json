@@ -1,0 +1,14 @@
+[
+  {"id":"blue-foyer","shift":"quartz-17","kind":"escort.move","at":16,"data":{"group":"blue","guide":"g-blue","destination":"foyer"}},
+  {"id":"blue-out","shift":"quartz-17","kind":"escort.exit","at":17,"data":{"group":"blue","guide":"g-blue"}},
+  {"id":"amber-old-guide","shift":"quartz-17","kind":"escort.move","at":18,"data":{"group":"amber","guide":"g-amber","destination":"foyer"}},
+  {"id":"amber-foyer","shift":"quartz-17","kind":"escort.move","at":18,"data":{"group":"amber","guide":"g-relay","destination":"foyer"}},
+  {"id":"amber-out","shift":"quartz-17","kind":"escort.exit","at":19,"data":{"group":"amber","guide":"g-relay"}},
+  {"id":"meter-three","shift":"quartz-17","kind":"gate.read","at":20,"data":{"step":3,"version":1,"entries":4,"exits":9,"mode":"reset"}},
+  {"id":"seal-first","shift":"quartz-17","kind":"close.seal","at":20,"data":{"desk":"desk-night"}},
+  {"id":"meter-two-late","shift":"quartz-17","kind":"gate.read","at":17,"data":{"step":2,"version":1,"entries":105,"exits":82,"mode":"normal"}},
+  {"id":"seal-unwitnessed","shift":"quartz-17","kind":"close.seal","at":20,"data":{"desk":"desk-night"}},
+  {"id":"bridge-three","shift":"quartz-17","kind":"gate.bridge","at":20,"data":{"read":"meter-three","tail_in":105,"tail_out":83,"base_in":4,"base_out":7,"witnesses":["g-spare","desk-night"]}},
+  {"id":"seal-old-desk","shift":"quartz-17","kind":"close.seal","at":20,"data":{"desk":"desk-day"}},
+  {"id":"seal-final","shift":"quartz-17","kind":"close.seal","at":20,"data":{"desk":"desk-night"}}
+]

@@ -1,0 +1,20 @@
+[
+  {"id":"meter-zero","shift":"quartz-17","kind":"gate.anchor","at":0,"data":{"entries":100,"exits":80}},
+  {"id":"p-foyer","shift":"quartz-17","kind":"patrol.note","at":2,"data":{"zone":"foyer","version":1,"state":"open","capacity":6,"inspector":"g-relay","trace":"foyer-sweep"}},
+  {"id":"p-pearl","shift":"quartz-17","kind":"patrol.note","at":2,"data":{"zone":"pearl","version":1,"state":"open","capacity":4,"inspector":"g-relay","trace":"pearl-sweep"}},
+  {"id":"p-echo","shift":"quartz-17","kind":"patrol.note","at":2,"data":{"zone":"echo","version":1,"state":"open","capacity":4,"inspector":"g-relay","trace":"echo-sweep"}},
+  {"id":"l-foyer","shift":"quartz-17","kind":"light.round","at":3,"data":{"round":"l-foyer","zone":"foyer","tester":"g-spare"}},
+  {"id":"lf-marker","shift":"quartz-17","kind":"light.check","at":3,"data":{"round":"l-foyer","channel":"marker","version":1,"reading":"pass"}},
+  {"id":"lf-reserve","shift":"quartz-17","kind":"light.check","at":3,"data":{"round":"l-foyer","channel":"reserve","version":1,"reading":"pass"}},
+  {"id":"l-pearl","shift":"quartz-17","kind":"light.round","at":3,"data":{"round":"l-pearl","zone":"pearl","tester":"g-spare"}},
+  {"id":"lp-marker","shift":"quartz-17","kind":"light.check","at":3,"data":{"round":"l-pearl","channel":"marker","version":1,"reading":"pass"}},
+  {"id":"lp-reserve","shift":"quartz-17","kind":"light.check","at":3,"data":{"round":"l-pearl","channel":"reserve","version":1,"reading":"pass"}},
+  {"id":"l-echo","shift":"quartz-17","kind":"light.round","at":3,"data":{"round":"l-echo","zone":"echo","tester":"g-spare"}},
+  {"id":"le-marker","shift":"quartz-17","kind":"light.check","at":3,"data":{"round":"l-echo","channel":"marker","version":1,"reading":"pass"}},
+  {"id":"le-reserve","shift":"quartz-17","kind":"light.check","at":3,"data":{"round":"l-echo","channel":"reserve","version":1,"reading":"weak"}},
+  {"id":"sheet-a","shift":"quartz-17","kind":"roster.sheet","at":4,"data":{"sheet":"sheet-a","guide":"g-amber","members":["a1","a2","a3"]}},
+  {"id":"roll-a1","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-a","person":"a1","version":1,"mark":"present"}},
+  {"id":"roll-a3","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-a","person":"a3","version":1,"mark":"excused"}},
+  {"id":"sheet-b","shift":"quartz-17","kind":"roster.sheet","at":4,"data":{"sheet":"sheet-b","guide":"g-blue","members":["b1"]}},
+  {"id":"roll-b1","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-b","person":"b1","version":1,"mark":"present"}}
+]

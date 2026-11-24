@@ -1,0 +1,4 @@
+[
+  {"id":"bad-packet-valid-head","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-a","person":"a2","version":1,"mark":"present"}},
+  {"id":"bad-packet-invalid-tail","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-a","person":"a3","version":3,"mark":"present"}}
+]

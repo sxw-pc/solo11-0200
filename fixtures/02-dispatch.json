@@ -1,0 +1,10 @@
+[
+  {"id":"dispatch-amber-early","shift":"quartz-17","kind":"escort.dispatch","at":6,"data":{"group":"amber","sheet":"sheet-a","guide":"g-amber"}},
+  {"id":"roll-a2","shift":"quartz-17","kind":"roster.mark","at":5,"data":{"sheet":"sheet-a","person":"a2","version":1,"mark":"present"}},
+  {"id":"amber","shift":"quartz-17","kind":"escort.dispatch","at":6,"data":{"group":"amber","sheet":"sheet-a","guide":"g-amber"}},
+  {"id":"amber-echo-retry","shift":"quartz-17","kind":"escort.move","at":7,"data":{"group":"amber","guide":"g-amber","destination":"echo"}},
+  {"id":"amber-pearl","shift":"quartz-17","kind":"escort.move","at":7,"data":{"group":"amber","guide":"g-amber","destination":"pearl"}},
+  {"id":"blue","shift":"quartz-17","kind":"escort.dispatch","at":8,"data":{"group":"blue","sheet":"sheet-b","guide":"g-blue"}},
+  {"id":"meter-one","shift":"quartz-17","kind":"gate.read","at":8,"data":{"step":1,"version":1,"entries":105,"exits":80,"mode":"normal"}},
+  {"id":"blue-echo","shift":"quartz-17","kind":"escort.move","at":9,"data":{"group":"blue","guide":"g-blue","destination":"echo"}}
+]

@@ -5,6 +5,7 @@ import sys
 from contextlib import closing
 from pathlib import Path
 
+from . import bag as bag_api
 from . import conditions, gate, journal, roster
 from .model import DomainError, choice, decode, minute, require, token
 from .store import config, connect, initialize, one, transaction
@@ -38,6 +39,38 @@ def parser():
     ):
         sub = commands.add_parser(name, help=help_text)
         sub.add_argument("file")
+
+    bag_parser = commands.add_parser(
+        "bag", aliases=["witness"], help="receive, compare, sign and trace witness bags")
+    bag_actions = bag_parser.add_subparsers(dest="bag_action", required=True)
+    for action_name, action_help in (
+        ("receive", "receive one bag or up to eight bags from JSON"),
+        ("plan", "dry-run a selected bag arrangement"),
+        ("compare", "compare selectable bag arrangements"),
+        ("sign", "atomically replay, journal and lock a chosen arrangement"),
+    ):
+        action = bag_actions.add_parser(action_name, help=action_help)
+        action.add_argument("file")
+    bag_arrange = bag_actions.add_parser("arrange", help="enumerate maximal replayable arrangements")
+    bag_arrange.add_argument("file", nargs="?")
+    bag_show = bag_actions.add_parser("show", help="show raw originals and conflicts for one bag")
+    bag_show.add_argument("identifier")
+    bag_verify = bag_actions.add_parser("verify", help="verify a signed decision and its originals")
+    bag_verify.add_argument("identifier")
+    bag_actions.add_parser("list", help="list received witness bags")
+    bag_actions.add_parser("decisions", help="list signed bag decisions")
+
+    merge_parser = commands.add_parser("merge", aliases=["sign", "choose"],
+                                       help="sign a bag selection decision file")
+    merge_parser.add_argument("file")
+    bags_parser = commands.add_parser("bags", help="receive one JSON bag or up to eight bags")
+    bags_parser.add_argument("file")
+    plan_parser = commands.add_parser("bag-plan", aliases=["plan"], help="dry-run a bag selection file")
+    plan_parser.add_argument("file")
+    compare_parser = commands.add_parser("bag-compare", aliases=["compare"],
+                                        help="compare bag arrangement file")
+    compare_parser.add_argument("file")
+
     for name, help_text in (
         ("roster", "review a roll call"), ("gate", "reconcile a meter cutoff"),
         ("zone", "combine patrol and lighting for a zone"), ("status", "review the desk and closure evidence"),
@@ -90,6 +123,36 @@ def demo(db):
             "review_reasons": report["closing"]["current"]["reasons"]}
 
 
+def run_bag(db, args):
+    if args.command == "bags":
+        return bag_api.receive(db, load(args.file))
+    if args.command in ("merge", "sign", "choose"):
+        return bag_api.sign(db, load(args.file))
+    if args.command in ("plan", "bag-plan"):
+        return bag_api.plan(db, load(args.file))
+    if args.command in ("compare", "bag-compare"):
+        return bag_api.compare(db, load(args.file))
+    action = getattr(args, "bag_action", None)
+    if action == "arrange":
+        payload = load(args.file) if getattr(args, "file", None) else None
+        return bag_api.arrange(db, payload)
+    if action == "receive":
+        return bag_api.receive(db, load(args.file))
+    if action == "plan":
+        return bag_api.plan(db, load(args.file))
+    if action == "compare":
+        return bag_api.compare(db, load(args.file))
+    if action == "sign":
+        return bag_api.sign(db, load(args.file))
+    if action == "show":
+        return bag_api.get_bag(db, args.identifier)
+    if action == "verify":
+        return bag_api.verify_decision(db, args.identifier)
+    if action == "decisions":
+        return bag_api.list_decisions(db)
+    return bag_api.list_bags(db)
+
+
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
@@ -102,8 +165,17 @@ def main(argv=None):
                 result = journal.record_many(db, [load(args.file)])[0]
             elif args.command == "load":
                 result = journal.record_many(db, load(args.file))
+            elif args.command in (
+                    "bag", "witness", "bags", "merge", "sign", "choose", "plan", "compare",
+                    "bag-plan", "bag-compare"):
+                result = run_bag(db, args)
             elif args.command == "rebuild":
                 result = journal.rebuild(db)
+                verification = bag_api.verify_all(db)
+                result["bag_verification"] = verification
+                result["bags"] = verification
+                result["bag_decisions"] = verification["decisions"]
+                result["bag_verified"] = verification["verified"]
             elif args.command == "demo":
                 result = demo(db)
             else:

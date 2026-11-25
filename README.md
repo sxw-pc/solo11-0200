@@ -51,6 +51,21 @@ python -B -m caveflow --db shift.sqlite rebuild
 
 `version` 从 1 开始连续增加。点名取截至查询分钟的最高版本。门区步号初次采录后固定分钟，同一洞段同一巡线分钟可修订，同一自检轮的渠道也可修订。巡线 `open` 使用额定容量，`restricted` 使用更低正容量，`closed` 容量为零。
 
+## 见证袋合入
+
+`bag receive FILE`（或直接 `bags FILE`）接收一个袋对象或最多八袋的数组。每袋包含 `author`、可选的 `references` 和 `receipts`；回执仍是上述 `patrol.note`、`light.round`、`light.check` 的 `at/data` 正文，外加仅在该 `author` 下唯一的 `id`。用 `caveflow.bag.digest({"kind","at","data"})` 生成正文摘要，引用写作精确的 `{"author","id","digest"}`；高版本还必须引用同洞段/分钟或同轮次/渠道的确切前版。
+
+```bash
+python -B -m caveflow --db shift.sqlite bags witness-bags.json
+python -B -m caveflow --db shift.sqlite bag compare choice.json
+python -B -m caveflow --db shift.sqlite bag sign choice.json
+python -B -m caveflow --db shift.sqlite bag show pearl-supplement
+python -B -m caveflow --db shift.sqlite rebuild
+python -B -m caveflow --db shift.sqlite bag verify echo-minute-10-choice
+```
+
+`choice.json` 可含 `desk`、`at`、`choice` 和两份命名 `plans`。计划先在内存数据库副本中重放；签署时在同一写事务内再次经现有日志规则写入 `events/receipts`、保存签收报告，并锁定袋与 `(author, external_id)` 原件。弱备用安排会把 `echo` 停在 `light_reduced`/有限容量，引用通过版备用回执的补录袋不会被另一作者的同版本读数替代，因而整袋保持待查。`rebuild` 后会自动核对签收回执、事件、原始袋文和锁映射。
+
 ## 裁决与恢复
 
 - 洞段取最新有效巡线与最新自检轮的容量下限。照明一轮需要两个渠道，只剩弱备用且标志灯通过时最多两人。新轮缺项、失败、过期或巡线封闭会阻止落位。已进洞组继续留在台账并报告超容。

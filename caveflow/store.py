@@ -6,8 +6,8 @@ from .model import decode, encode, fields, number, require, token, tokens
 
 SCHEMA = Path(__file__).with_name("schema.sql")
 PROJECTIONS = (
-    "receipts", "operation_clock", "closing", "desk_offers", "transfers", "groups", "light_checks",
-    "light_rounds", "patrol_notes", "gate_bridges", "gate_reads", "gate_anchor",
+    "receipts", "operation_clock", "closing", "desk_offers", "transfers", "groups", "light_power",
+    "light_checks", "light_rounds", "patrol_notes", "gate_bridges", "gate_reads", "gate_anchor",
     "roster_marks", "roster_sheets",
 )
 

@@ -1,5 +1,5 @@
-from .conditions import zone_state
-from .model import choice, decode, encode, fields, require, token
+from .conditions import power_admits, power_review, zone_state
+from .model import choice, decode, encode, fields, number, require, token
 from .roster import membership_review, presence
 from .store import one, rows
 
@@ -12,15 +12,70 @@ def active_groups(db):
     return rows(db, "SELECT * FROM groups WHERE exited_at IS NULL ORDER BY id")
 
 
+def occupancy(db):
+    result = {}
+    for group in active_groups(db):
+        result[group["zone"]] = result.get(group["zone"], 0) + len(decode(group["members"]))
+    return result
+
+
 def occupied(db, zone):
-    return sum(len(decode(group["members"])) for group in active_groups(db) if group["zone"] == zone)
+    return occupancy(db).get(zone, 0)
 
 
-def landing(db, cfg, zone, at, load):
+def landing(db, cfg, zone, at, load, origin=None):
     condition = zone_state(db, cfg, zone, at)
-    used = occupied(db, zone)
+    loads = occupancy(db)
+    used = loads.get(zone, 0)
+    if origin is not None and origin != zone:
+        loads[origin] = loads.get(origin, 0) - load
+    loads[zone] = used + load
+    power = power_review(db, cfg, at, loads)
+    fits = (condition["capacity"] > 0 and used + load <= condition["capacity"]
+            and power_admits(power, zone))
     return {"condition": condition, "occupied": used, "requested": load,
-            "fits": condition["capacity"] > 0 and used + load <= condition["capacity"]}
+            "fits": fits, "power": power}
+
+
+def landing_plans(db, cfg, at, candidates):
+    """Maximal legal whole-group landing plans for simultaneous arriving candidates."""
+    require(isinstance(candidates, list) and candidates, "expected a nonempty candidate list")
+    normalized = []
+    for candidate in candidates:
+        require(isinstance(candidate, dict) and {"zone", "load"} <= candidate.keys() <= {"label", "zone", "load"},
+                "candidate needs zone and load with an optional label")
+        label = token(candidate["label"]) if "label" in candidate else f"candidate-{len(normalized) + 1}"
+        normalized.append({"label": label, "zone": choice(candidate["zone"], cfg["zones"]),
+                           "load": number(candidate["load"], 1)})
+    require(len({c["label"] for c in normalized}) == len(normalized), "candidate labels must be unique")
+    base = occupancy(db)
+    ceilings = {}
+    for candidate in normalized:
+        zone = candidate["zone"]
+        if zone not in ceilings:
+            ceilings[zone] = zone_state(db, cfg, zone, at)["capacity"]
+    feasible = []
+    for mask in range(1, 1 << len(normalized)):
+        chosen = [c for i, c in enumerate(normalized) if mask & (1 << i)]
+        projected = dict(base)
+        for candidate in chosen:
+            zone = candidate["zone"]
+            projected[zone] = projected.get(zone, 0) + candidate["load"]
+        targets = {c["zone"] for c in chosen}
+        if any(ceilings[zone] <= 0 or projected[zone] > ceilings[zone] for zone in targets):
+            continue
+        power = power_review(db, cfg, at, projected)
+        if not all(power_admits(power, zone) for zone in targets):
+            continue
+        feasible.append((mask, chosen, projected, power))
+    plans = []
+    for mask, chosen, projected, power in feasible:
+        if any(other != mask and mask & other == mask for other, _, _, _ in feasible):
+            continue
+        plans.append({"landings": chosen, "power": power,
+                      "occupancy": {zone: people for zone, people in sorted(projected.items()) if people}})
+    return {"decision": "plans_found" if plans else "no_feasible_plan", "at": at,
+            "candidates": normalized, "plans": plans}
 
 
 def dispatch(db, cfg, event):
@@ -79,7 +134,7 @@ def move(db, cfg, event):
         return blocked
     if destination not in cfg["zones"][group["zone"]]["neighbors"]:
         return held("not_adjacent", origin=group["zone"], destination=destination)
-    admission = landing(db, cfg, destination, event["at"], len(decode(group["members"])))
+    admission = landing(db, cfg, destination, event["at"], len(decode(group["members"])), origin=group["zone"])
     if not admission["fits"]:
         return held("destination_admission", landing=admission, origin=group["zone"])
     db.execute("UPDATE groups SET zone = ? WHERE id = ?", (destination, group["id"]))

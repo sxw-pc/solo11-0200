@@ -42,6 +42,10 @@ CREATE TABLE IF NOT EXISTS light_checks (
     version INTEGER NOT NULL, reading TEXT NOT NULL, event_id TEXT NOT NULL REFERENCES events(id),
     PRIMARY KEY (round, channel, version)
 );
+CREATE TABLE IF NOT EXISTS light_power (
+    at INTEGER NOT NULL, lines TEXT NOT NULL, wiring TEXT NOT NULL, unit_load INTEGER NOT NULL,
+    rounds TEXT NOT NULL, event_id TEXT PRIMARY KEY REFERENCES events(id)
+);
 CREATE TABLE IF NOT EXISTS groups (
     id TEXT PRIMARY KEY, sheet TEXT NOT NULL UNIQUE REFERENCES roster_sheets(id),
     members TEXT NOT NULL, roster_evidence TEXT NOT NULL, custodian TEXT NOT NULL,

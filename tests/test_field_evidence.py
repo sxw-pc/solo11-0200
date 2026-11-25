@@ -1,6 +1,7 @@
-from caveflow import gate, roster
+from caveflow import escort, gate, journal, roster
 from caveflow.conditions import zone_state
 from caveflow.model import DomainError
+from caveflow.store import connect, one
 from tests.shift_support import CLOSE, DISPATCH, HANDOFF, OPEN, CFG, event, ShiftCase
 
 

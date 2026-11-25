@@ -7,6 +7,7 @@ HANDLERS = {
     "roster.sheet": roster.sheet, "roster.mark": roster.mark,
     "gate.anchor": gate.anchor, "gate.read": gate.read, "gate.bridge": gate.bridge,
     "patrol.note": patrol.note, "light.round": lighting.start_round, "light.check": lighting.check,
+    "light.power": lighting.power,
     "escort.dispatch": escort.dispatch, "escort.move": escort.move,
     "escort.offer": escort.offer, "escort.resolve": escort.resolve, "escort.exit": escort.exit_group,
     "desk.offer": handoff.offer, "desk.accept": handoff.accept,
